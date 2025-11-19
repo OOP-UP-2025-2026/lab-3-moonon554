@@ -1,48 +1,60 @@
+package org.example.task2;
+
 import java.util.Arrays;
 
 public class Cart {
-    private Item[] items;
-    private int size;
 
-    public Cart(int capacity) {
-        this.items = new Item[capacity];
+    private Item[] contents;
+    private int index;
+
+    public Cart(int size) {
+        this.contents = new Item[size];
+        this.index = 0;
     }
 
     public void add(Item item) {
-        if (size == items.length)
-            throw new RuntimeException("Cart is full!");
-
-        items[size++] = item;
+        if (isCartFull()) return;
+        this.contents[index] = item;
+        this.index++;
     }
 
     public void removeById(long id) {
-        int index = find(id);
-        if (index == -1) return;
+        int foundIndex = findItemIndexById(id);
 
-        for (int i = index; i < size - 1; i++)
-            items[i] = items[i + 1];
+        if (foundIndex == -1) return;
 
-        items[size - 1] = null;
-        size--;
+        // пересунути вліво
+        for (int i = foundIndex; i < index - 1; i++) {
+            contents[i] = contents[i + 1];
+        }
+        contents[index - 1] = null;
+        index--;
     }
 
-    private int find(long id) {
-        for (int i = 0; i < size; i++) {
-            if (items[i].getId() == id) return i;
+    private int findItemIndexById(long id) {
+        for (int i = 0; i < index; i++) {
+            if (contents[i].getId() == id) return i;
         }
         return -1;
     }
 
-    public Item[] getItems() {
-        return Arrays.copyOf(items, size);
+    public boolean isCartFull() {
+        return index == contents.length;
     }
 
     public int getSize() {
-        return size;
+        return this.index;
+    }
+
+    public Item getItem(int i) {
+        return this.contents[i];
     }
 
     @Override
     public String toString() {
-        return "Cart{" + Arrays.toString(getItems()) + "}\n";
+        return "Cart{" +
+                "contents=" + Arrays.toString(contents) +
+                "}\n";
     }
 }
+
