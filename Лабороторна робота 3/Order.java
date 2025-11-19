@@ -1,4 +1,7 @@
+package org.example.task2;
+
 public class Order {
+
     private long id;
     private String customer;
 
@@ -8,22 +11,28 @@ public class Order {
     }
 
     public String formOrderBill(Cart cart) {
-        StringBuilder b = new StringBuilder();
 
-        b.append("Order #").append(id)
-                .append(" for ").append(customer)
+        StringBuilder builder = new StringBuilder();
+        builder.append("Order number ").append(id)
+                .append(" for customer ").append(customer)
                 .append("\n------------------\n");
 
-        double sum = 0;
+        double sum = 0.0;
 
-        for (Item item : cart.getItems()) {
-            b.append(item.toString());
+        for (int i = 0; i < cart.getSize(); i++) {
+            Item item = cart.getItem(i);
             sum += item.getPrice();
+
+            builder.append("Item id: ").append(item.getId())
+                    .append(" name: ").append(item.getName())
+                    .append(" price: ").append(item.getPrice())
+                    .append("\n");
         }
 
-        b.append("------------------\n");
-        b.append("Total: ").append(sum);
+        builder.append("------------------\nTotal sum: ")
+                .append(sum);
 
-        return b.toString();
+        return builder.toString();
     }
 }
+
