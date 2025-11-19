@@ -1,4 +1,7 @@
+package org.example.task2;
+
 public class Item {
+
     private long id;
     private String name;
     private double price;
@@ -9,13 +12,25 @@ public class Item {
         this.price = price;
     }
 
-    public long getId() { return id; }
-    public String getName() { return name; }
-    public double getPrice() { return price; }
+    public long getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public double getPrice() {
+        return this.price;
+    }
 
     @Override
     public String toString() {
-        return "Item{id=" + id + ", name='" + name + "', price=" + price + "}\n";
+        return "Item{" +
+                "id=" + id +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                '}' + "\n";
     }
 }
 
