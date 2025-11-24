@@ -1,60 +1,40 @@
-package org.example.task2;
-
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cart {
+    private List<Item> items;
 
-    private Item[] contents;
-    private int index;
-
-    public Cart(int size) {
-        this.contents = new Item[size];
-        this.index = 0;
+    public Cart() {
+        items = new ArrayList<>();
     }
 
-    public void add(Item item) {
-        if (isCartFull()) return;
-        this.contents[index] = item;
-        this.index++;
+    public void addItem(Item item) {
+        items.add(item);
     }
 
-    public void removeById(long id) {
-        int foundIndex = findItemIndexById(id);
+    // Видалення товару (корисно мати)
+    public void removeItem(String itemName) {
+        items.removeIf(item -> item.getName().equalsIgnoreCase(itemName));
+    }
 
-        if (foundIndex == -1) return;
-
-        // пересунути вліво
-        for (int i = foundIndex; i < index - 1; i++) {
-            contents[i] = contents[i + 1];
+    public double getTotal() {
+        double sum = 0;
+        for (Item item : items) {
+            sum += item.totalPrice();
         }
-        contents[index - 1] = null;
-        index--;
+        return sum;
     }
 
-    private int findItemIndexById(long id) {
-        for (int i = 0; i < index; i++) {
-            if (contents[i].getId() == id) return i;
+    public void showCart() {
+        if (items.isEmpty()) {
+            System.out.println("Кошик порожній.");
+            return;
         }
-        return -1;
-    }
-
-    public boolean isCartFull() {
-        return index == contents.length;
-    }
-
-    public int getSize() {
-        return this.index;
-    }
-
-    public Item getItem(int i) {
-        return this.contents[i];
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "contents=" + Arrays.toString(contents) +
-                "}\n";
+        System.out.println("--- Вміст кошика ---");
+        for (Item item : items) {
+            System.out.println(item);
+        }
+        System.out.println("--------------------");
+        System.out.println("Всього до сплати: " + getTotal());
     }
 }
-
