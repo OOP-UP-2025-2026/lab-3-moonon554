@@ -1,29 +1,62 @@
-package org.example.task2;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Вітаємо в магазині!");
+        System.out.print("Введіть ваше ім'я: ");
+        String name = sc.nextLine();
 
-        Cart cart = new Cart(10);
+        Cart cart = new Cart();
+        boolean adding = true;
 
-        cart.add(new Item(1, "Samsung Galaxy S23", 27999));
-        cart.add(new Item(2, "Lenovo IdeaPad 3", 19499));
-        cart.add(new Item(3, "LG 55\" 4K Smart TV", 15999));
-        cart.add(new Item(4, "Bosch Serie 6 Пральна машина", 14799));
-        cart.add(new Item(5, "Samsung RB34 Холодильник", 22399));
-        cart.add(new Item(6, "De'Longhi Magnifica S Кавоварка", 10599));
-        cart.add(new Item(7, "Gorenje Електрична плита", 9999));
-        cart.add(new Item(8, "Dyson V11 Пилосос", 16499));
-        cart.add(new Item(9, "Samsung ME83K Мікрохвильова піч", 3199));
-        cart.add(new Item(10, "Philips DryCare Фен", 1499));
+        while (adding) {
+            System.out.println("\n--- Додавання товару ---");
+            
+            System.out.print("Назва товару: ");
+            String itemName = sc.nextLine();
 
-        System.out.println(cart);
+            double price = 0;
+            while (true) {
+                System.out.print("Ціна за одиницю: ");
+                try {
+                    price = Double.parseDouble(sc.nextLine());
+                    if (price < 0) System.out.println("Ціна має бути додатною!");
+                    else break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Будь ласка, введіть число.");
+                }
+            }
 
-        cart.removeById(9);
+            int quantity = 0;
+            while (true) {
+                System.out.print("Кількість: ");
+                try {
+                    quantity = Integer.parseInt(sc.nextLine());
+                    if (quantity < 0) System.out.println("Кількість має бути додатною!");
+                    else break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Будь ласка, введіть ціле число.");
+                }
+            }
 
-        System.out.println(cart);
+            // Створення об'єкта і додавання в кошик
+            Item newItem = new Item(itemName, price, quantity);
+            cart.addItem(newItem);
+            System.out.println("Товар додано!");
 
-        Order order = new Order(1L, "John");
-        String bill = order.formOrderBill(cart);
-        System.out.println(bill);
+            System.out.print("\nБажаєте додати ще товар? (так/ні): ");
+            String answer = sc.nextLine().trim().toLowerCase();
+            if (answer.equals("ні") || answer.equals("no") || answer.equals("-")) {
+                adding = false;
+            }
+        }
+
+        // Формування замовлення
+        Order order = new Order(name, cart);
+        order.showOrder();
+        
+        sc.close();
     }
 }
